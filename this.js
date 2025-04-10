@@ -2,8 +2,8 @@
 function introduce(name) {
   console.log(this.name); // Output: Alex
   // Q: What is printed? Why does this.name work (or not) in this context?
-  // A: It prints "Alex" because `this` in a regular function (in global scope) refers to the global object (window).
-  // Since we assigned this.name = "Alex" globally, it works.
+  // A: It prints "Alex" since `this` in a regular function it refers to the global object.
+
 }
 this.name = "Alex"; // global assignment
 introduce();
@@ -14,8 +14,8 @@ function runArrow(greeting) {
   const arrowFunc = () => {
     console.log(this.greeting); // Output: Hello!
     // Q: What does this.greeting refer to here? Why doesn't it refer to the parameter anymore?
-    // A: Arrow functions don't have their own `this`; they use the surrounding context's `this`.
-    // Since we assigned this.greeting = "Hello!" in the global scope, that's what it uses.
+    // A: Arrow functions don't have their own `this` they have to use the surrounding context's `this`.
+ 
   };
   arrowFunc();
 }
@@ -29,8 +29,8 @@ const display = {
   show: function (param) {
     console.log(this.message); // Output: This is from the object
     // Q: What is printed now? Why does this refer to the object? What happened to the argument?
-    // A: `this` refers to the `display` object because `show` is a regular method call.
-    // The argument is no longer used since we replaced it with this.message.
+    // A: `this` is refering to `display` object because `show` is a regular method.
+
   }
 };
 display.show();
@@ -45,8 +45,8 @@ document.getElementById("myBtn").onclick = function () {
   this.text = "Clicked!";
   handleClick(); 
   // Q: What does this.text refer to in each case? Why does the arrow function behave differently?
-  // A: In the regular function, `this` refers to the element (button), but `handleClick()` runs with its own `this` (global), so it prints undefined.
-  // In the arrow function, `this` is lexically inherited from the outer (global) scope, so both the assignment and logging happen on the same `this` (global).
+  // A: In the regular function, `this` refers to the element, but `handleClick()` uses it's own `this`, so it prints undefined.
+
 };
 
 document.getElementById("myBtn").onclick = () => {
