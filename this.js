@@ -1,57 +1,56 @@
 // Problem 1
 function introduce(name) {
-    console.log(name);
-  }
-  introduce("Alex");
- 
-// Task:
-// Replace the name reference inside the function with this.name. 
-// Then assign this.name = "Alex" in the global scope before calling the function (ignore the parameter when testing this).
+  console.log(this.name); // Output: Alex
+  // Q: What is printed? Why does this.name work (or not) in this context?
+  // A: It prints "Alex" because `this` in a regular function (in global scope) refers to the global object (window).
+  // Since we assigned this.name = "Alex" globally, it works.
+}
+this.name = "Alex"; // global assignment
+introduce();
 
-// Q: What is printed? Why does this.name work (or not) in this context?
 
 // Problem 2
-
 function runArrow(greeting) {
-    const arrowFunc = () => {
-      console.log(greeting);
-    };
-    arrowFunc();
-  }
-  runArrow("Hello!");
+  const arrowFunc = () => {
+    console.log(this.greeting); // Output: Hello!
+    // Q: What does this.greeting refer to here? Why doesn't it refer to the parameter anymore?
+    // A: Arrow functions don't have their own `this`; they use the surrounding context's `this`.
+    // Since we assigned this.greeting = "Hello!" in the global scope, that's what it uses.
+  };
+  arrowFunc();
+}
+this.greeting = "Hello!"; // global assignment
+runArrow();
 
-  
-//   Task:
-//   Replace greeting with this.greeting and assign this.greeting = "Hello!"; before calling the outer function.
-  
-//   Q: What does this.greeting refer to here? Why doesn't it refer to the parameter anymore? 
 
 // Problem 3
-
 const display = {
-    message: "This is from the object",
-    show: function (param) {
-      console.log(param);
-    }
-  };
-  display.show("Passed argument");
+  message: "This is from the object",
+  show: function (param) {
+    console.log(this.message); // Output: This is from the object
+    // Q: What is printed now? Why does this refer to the object? What happened to the argument?
+    // A: `this` refers to the `display` object because `show` is a regular method call.
+    // The argument is no longer used since we replaced it with this.message.
+  }
+};
+display.show();
 
-//   Task:
-// Replace param with this.message inside the function.
-
-// Q: What is printed now? Why does this refer to the object? What happened to the argument?
 
 // Problem 4
+function handleClick(text) {
+  console.log(this.text); // Output: undefined (with regular function), "Clicked!" (with arrow function)
+}
 
-  function handleClick(text) {
-    console.log(text);
-  }
+document.getElementById("myBtn").onclick = function () {
+  this.text = "Clicked!";
+  handleClick(); 
+  // Q: What does this.text refer to in each case? Why does the arrow function behave differently?
+  // A: In the regular function, `this` refers to the element (button), but `handleClick()` runs with its own `this` (global), so it prints undefined.
+  // In the arrow function, `this` is lexically inherited from the outer (global) scope, so both the assignment and logging happen on the same `this` (global).
+};
 
-  document.getElementById("myBtn").onclick = function () {
-    handleClick("Clicked!");
-  };
-
-// Task:
-// Instead of passing "Clicked!", change handleClick() to use this.text, and assign this.text = "Clicked!"; inside the event function. Also try the same with an arrow function.
-
-// Q: What does this.text refer to in each case? Why does the arrow function behave differently?
+document.getElementById("myBtn").onclick = () => {
+  this.text = "Clicked!";
+  handleClick(); 
+  // A: In the arrow function, `this` refers to the outer scope (`window`), so both assignment and `handleClick()` use `window.text`, which is "Clicked!".
+};
